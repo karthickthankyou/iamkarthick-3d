@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Box3, ColorRepresentation, Vector3 } from 'three'
+import { DirectionalSign } from './DirectionSign'
 
 interface TriggerProps {
   size?: [number, number, number]
@@ -46,6 +47,9 @@ export const Trigger: React.FC<TriggerProps> = ({
     <mesh ref={mesh} position={position}>
       <boxBufferGeometry args={size} />
       <meshBasicMaterial color={color} transparent opacity={0.4} />
+      {isInside ? (
+        <DirectionalSign position={[10, 0, 0]} labelText={'Zillow clone'} />
+      ) : null}
     </mesh>
   )
 }
