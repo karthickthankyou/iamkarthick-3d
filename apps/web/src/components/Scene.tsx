@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import { Grid, OrbitControls, OrthographicCamera } from '@react-three/drei'
+import { Trigger } from './Trigger'
 
 const radians = (degrees: number) => (degrees * Math.PI) / 180
 
@@ -78,7 +79,12 @@ const Rectangle = () => {
   })
 
   return (
-    <mesh ref={mesh} position={[0, 0, 0]} rotation={[radians(90), 0, 0]}>
+    <mesh
+      name="rectangle"
+      ref={mesh}
+      position={[0, 0, 0]}
+      rotation={[radians(90), 0, 0]}
+    >
       <boxBufferGeometry args={[2, 1, 0.04]} />
       <meshBasicMaterial color={'red'} />
     </mesh>
@@ -102,6 +108,19 @@ export const Scene = () => {
           far={100}
         />
         <Rectangle />
+        <Trigger
+          size={[2, 0.1, 3]}
+          position={[1, 0, 1]}
+          onEntry={() => console.log('Entered')}
+          onExit={() => console.log('Exited')}
+        />
+        <Trigger
+          size={[2, 0.1, 3]}
+          position={[8, 0, 4]}
+          color="beige"
+          onEntry={() => console.log('Entered')}
+          onExit={() => console.log('Exited')}
+        />
       </Canvas>
     </div>
   )
