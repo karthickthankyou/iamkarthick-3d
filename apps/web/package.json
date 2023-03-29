@@ -10,6 +10,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
+    "@react-three/cannon": "^6.5.2",
     "@react-three/drei": "^9.58.5",
     "@types/node": "18.15.10",
     "@types/react": "18.0.30",
@@ -21,7 +22,8 @@
     "react-dom": "18.2.0",
     "react-three-fiber": "^6.0.13",
     "three": "^0.150.1",
-    "typescript": "5.0.2"
+    "typescript": "5.0.2",
+    "use-sound": "^4.0.1"
   },
   "devDependencies": {
     "@types/three": "^0.150.0"

@@ -1,8 +1,7 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
-import styles from '@zillow/styles/Home.module.css'
 import { Scene } from '@zillow/components/Scene'
+import { Canvas } from '@react-three/fiber'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +15,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Scene />
+        <div style={{ width: '100vw', height: '100vh' }}>
+          <Canvas style={{ backgroundColor: 'white' }}>
+            <Scene />
+          </Canvas>
+        </div>
       </main>
     </>
   )
