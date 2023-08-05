@@ -5,12 +5,38 @@ import {
   MIN_SPEED,
   radians,
 } from '@zillow/util'
-import { Trail } from '@react-three/drei'
 import { useBox } from '@react-three/cannon'
 
 import { useEffect, useRef, useState } from 'react'
 import { useThree, useFrame } from 'react-three-fiber'
-import { Box3, Vector3 } from 'three'
+import THREE, {
+  Box3,
+  Color,
+  ShaderMaterial,
+  TextureLoader,
+  Vector3,
+} from 'three'
+import {
+  fragmentShader,
+  fragmentShaderFaceRatio,
+  vertexShader,
+} from '@zillow/shaders'
+
+export const shaderMaterial = new ShaderMaterial({
+  uniforms: {
+    color: { value: new Color('red') },
+  },
+  vertexShader,
+  fragmentShader: fragmentShader,
+})
+
+export const shaderMaterialBlack = new ShaderMaterial({
+  uniforms: {
+    color: { value: new Color('black') },
+  },
+  vertexShader,
+  fragmentShader,
+})
 
 const usePressedKeys = () => {
   const [pressedKeys, setPressedKeys] = useState(new Set<string>())
@@ -41,7 +67,7 @@ const usePressedKeys = () => {
 export const Rectangle = () => {
   const mesh = useRef<THREE.Mesh>(null!)
   const { viewport, camera } = useThree()
-  const [speed, setSpeed] = useState(() => 0.1)
+  const [speed, setSpeed] = useState(() => 0.4)
 
   const { pressedKeys } = usePressedKeys()
 
@@ -51,6 +77,7 @@ export const Rectangle = () => {
   useFrame(({ scene }) => {
     scene.userData.rectangle = mesh.current
     scene.userData.rectanglePosition = targetPosition
+    scene.userData.setSpeed = setSpeed
 
     if (pressedKeys.has('ArrowUp') || pressedKeys.has('KeyW')) {
       targetPosition.current.x -= speed * Math.cos(mesh.current.rotation.z)
@@ -58,18 +85,23 @@ export const Rectangle = () => {
     }
 
     if (pressedKeys.has('ArrowDown') || pressedKeys.has('KeyS')) {
-      targetPosition.current.x += speed * Math.cos(mesh.current.rotation.z)
-      targetPosition.current.z += speed * Math.sin(mesh.current.rotation.z)
+      targetPosition.current.x +=
+        (speed / 4) * Math.cos(mesh.current.rotation.z)
+      targetPosition.current.z +=
+        (speed / 4) * Math.sin(mesh.current.rotation.z)
     }
     if (pressedKeys.has('ArrowLeft') || pressedKeys.has('KeyA')) {
-      targetRotation.current -= speed
+      targetRotation.current -= 0.05
     }
     if (pressedKeys.has('ArrowRight') || pressedKeys.has('KeyD')) {
-      targetRotation.current += speed
+      targetRotation.current += 0.05
     }
     if (pressedKeys.has('KeyN')) {
       setSpeed((state) => Math.min(MAX_SPEED, state + 0.01))
     }
+    // if (pressedKeys.has('KeyS')) {
+    //   setSpeed((state) => state * 2)
+    // }
     if (pressedKeys.has('KeyM')) {
       setSpeed((state) => Math.max(MIN_SPEED, state - 0.01))
     }
@@ -98,14 +130,34 @@ export const Rectangle = () => {
   })
 
   return (
-    <mesh
-      name="rectangle"
-      ref={mesh}
-      position={[0, 0, 0]}
-      rotation={[radians(90), 0, 0]}
-    >
-      <boxBufferGeometry args={[2, 1, 0.04]} />
-      <meshBasicMaterial color={'red'} />
-    </mesh>
+    <>
+      <mesh
+        name="rectangle"
+        ref={mesh}
+        position={[0, 1.2, 0]}
+        rotation={[radians(90), 0, 0]}
+      >
+        <boxGeometry args={[2.5, 1, 0.5]} />
+        <primitive object={shaderMaterial} />
+        {/* Shadow as a child */}
+        <mesh position={[0, 0, 1]} rotation={[radians(180), 0, 0]}>
+          <planeGeometry args={[4, 2]} />
+          <meshBasicMaterial
+            map={new TextureLoader().load('shadow.png')}
+            transparent
+            opacity={0.1}
+          />
+        </mesh>
+        {/* Front Slope */}
+        <mesh position={[1, 0, 0]} rotation={[0, radians(0), radians(0)]}>
+          <boxGeometry args={[1.5, 1.5, 0.5]} />
+          <primitive object={shaderMaterial} />
+        </mesh>
+        <mesh position={[0, 0, 0.6]} rotation={[0, radians(0), radians(0)]}>
+          <boxGeometry args={[2, 1, 0.1]} />
+          <primitive object={shaderMaterialBlack} />
+        </mesh>
+      </mesh>
+    </>
   )
 }

@@ -2,6 +2,11 @@ import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import { Scene } from '@zillow/components/Scene'
 import { Canvas } from '@react-three/fiber'
+import { Html, OrbitControls } from '@react-three/drei'
+import { Terrain } from '@zillow/components/Terrain'
+import { Vector3, AmbientLight, DirectionalLight } from 'three'
+import { Building } from '@zillow/components/Building2'
+import { Plane } from '@zillow/components/Plane'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,8 +21,116 @@ export default function Home() {
       </Head>
       <main>
         <div style={{ width: '100vw', height: '100vh' }}>
-          <Canvas style={{ backgroundColor: 'white' }}>
+          {/* Sea: cornflowerblue */}
+          {/* Land: burlywood */}
+
+          <div
+            style={{
+              padding: '1rem',
+              position: 'absolute',
+            }}
+          >
+            Hey score.
+          </div>
+
+          <Canvas
+            style={{
+              background:
+                'linear-gradient(to top right, hsl(0, 0%, 15%), hsl(52, 0%, 30%))',
+            }}
+          >
             <Scene />
+
+            <OrbitControls />
+            {/* <Terrain /> */}
+            {/* <Terrain position={new Vector3(10, 0, 0)} /> */}
+            {/* <Terrain position={new Vector3(10, 0, 10)} /> */}
+
+            <Terrain
+              position={new Vector3(20, 0, -60)}
+              sizeX={160}
+              sizeY={40}
+              minHeight={3}
+              maxHeight={12}
+              color={'white'}
+            />
+            <Terrain
+              position={new Vector3(20, 0, -30)}
+              sizeX={160}
+              sizeY={20}
+              minHeight={-1}
+              maxHeight={1}
+              color={'white'}
+            />
+            <Terrain
+              position={new Vector3(0, 0, 0)}
+              sizeX={40}
+              sizeY={40}
+              minHeight={0}
+              maxHeight={1}
+              color={'white'}
+              segments={1}
+            />
+            <Terrain
+              position={new Vector3(-30, 0, 20)}
+              sizeX={80}
+              sizeY={80}
+              color={'white'}
+            />
+            <Plane
+              position={new Vector3(60, -3, 20)}
+              color={'seagreen'}
+              sizeX={80}
+              sizeY={80}
+              opacity={0.2}
+            />
+
+            <Terrain
+              position={new Vector3(60, 0, 20)}
+              minHeight={-10}
+              maxHeight={-20}
+              sizeX={80}
+              sizeY={80}
+              color={'white'}
+              right={-20}
+            />
+            <Plane
+              position={new Vector3(140, -3, 20)}
+              color={'seagreen'}
+              sizeX={80}
+              sizeY={80}
+              opacity={0.2}
+            />
+            <Terrain
+              position={new Vector3(140, 0, 20)}
+              minHeight={-10}
+              maxHeight={-20}
+              sizeX={80}
+              sizeY={80}
+              color={'white'}
+              left={-20}
+              top={-20}
+            />
+
+            <Plane
+              position={new Vector3(140, -3, -60)}
+              color={'seagreen'}
+              sizeX={80}
+              sizeY={80}
+              opacity={0.2}
+            />
+            <Terrain
+              position={new Vector3(140, 0, -60)}
+              minHeight={-10}
+              maxHeight={-20}
+              sizeX={80}
+              sizeY={80}
+              color={'white'}
+              bottom={-20}
+            />
+
+            <Building position={new Vector3(-60, 0, 0)} floors={20} />
+            <Building position={new Vector3(-30, 0, 0)} floors={6} sides={12} />
           </Canvas>
         </div>
       </main>

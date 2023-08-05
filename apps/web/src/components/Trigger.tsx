@@ -32,7 +32,7 @@ export const Trigger: React.FC<TriggerProps> = ({
       if (box.intersectsBox(rectangleBox)) {
         if (!isInside) {
           console.log('Rectangle entered the trigger area')
-          ;(rectangle.material as THREE.MeshBasicMaterial).color.set(color)
+          //   ;(rectangle.material as THREE.MeshBasicMaterial).color.set(color)
           onEntry()
 
           setIsInside(true)
@@ -42,7 +42,7 @@ export const Trigger: React.FC<TriggerProps> = ({
           console.log('Rectangle exited the trigger area')
 
           onExit()
-          ;(rectangle.material as THREE.MeshBasicMaterial).color.set('black')
+          //   ;(rectangle.material as THREE.MeshBasicMaterial).color.set('red')
           setIsInside(false)
         }
       }
@@ -51,7 +51,7 @@ export const Trigger: React.FC<TriggerProps> = ({
 
   return (
     <mesh name="trigger" ref={mesh} position={position}>
-      <boxBufferGeometry args={size} />
+      <boxGeometry args={size} />
       <meshBasicMaterial color={color} transparent opacity={0.4} />
       {isInside ? (
         <DirectionalSign position={[11, 0, 0]} labelText={'Zillow clone'} />
